@@ -18,13 +18,12 @@ namespace BlogAPI.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Blog-Category Relationship
+            // Blog-Category Many-to-Many Relationship
             modelBuilder.Entity<Blog>()
-                .HasOne<Category>()
-                .WithMany(c => c.Blogs)
-                .HasForeignKey("CategoryId");
+                .HasMany(b => b.Categories)
+                .WithMany(c => c.Blogs);
 
-            // Blog-Tag Relationship (Many-to-Many)
+            // Blog-Tag Many-to-Many Relationship
             modelBuilder.Entity<Blog>()
                 .HasMany(b => b.Tags)
                 .WithMany(t => t.Blogs);

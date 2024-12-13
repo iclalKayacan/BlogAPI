@@ -7,9 +7,12 @@ public class Blog
     public string Content { get; set; }
     public string Author { get; set; }
     public List<Tag> Tags { get; set; } = new List<Tag>();
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public List<Category> Categories { get; set; } = new List<Category>();
+
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime? UpdatedAt { get; set; }
     public int Views { get; set; }
     public int Likes { get; set; }
     public List<Comment> Comments { get; set; } = new List<Comment>();
+
 }

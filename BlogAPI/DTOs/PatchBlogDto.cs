@@ -1,6 +1,6 @@
 ﻿namespace BlogAPI.DTOs
 {
-    public class CreateBlogDto
+    public class PatchBlogDto
     {
         public string Title { get; set; }
         public string Content { get; set; }
@@ -9,5 +9,7 @@
         public List<int> CategoryIds { get; set; } = new List<int>();
 
     }
+
+
 
 }
