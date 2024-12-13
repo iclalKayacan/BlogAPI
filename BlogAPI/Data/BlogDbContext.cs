@@ -35,5 +35,47 @@ namespace BlogAPI.Data
                 .WithMany(b => b.Comments)
                 .HasForeignKey(c => c.BlogId);
         }
+        public override int SaveChanges()
+        {
+            // CreatedAt ve UpdatedAt otomatik ayarı
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                if (entry.Entity is Blog blog)
+                {
+                    if (entry.State == EntityState.Added)
+                    {
+                        blog.CreatedAt = DateTime.UtcNow;
+                    }
+
+                    if (entry.State == EntityState.Modified)
+                    {
+                        blog.UpdatedAt = DateTime.UtcNow;
+                    }
+                }
+            }
+
+            return base.SaveChanges();
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                if (entry.Entity is Blog blog)
+                {
+                    if (entry.State == EntityState.Added)
+                    {
+                        blog.CreatedAt = DateTime.UtcNow;
+                    }
+
+                    if (entry.State == EntityState.Modified)
+                    {
+                        blog.UpdatedAt = DateTime.UtcNow;
+                    }
+                }
+            }
+
+            return await base.SaveChangesAsync(cancellationToken);
+        }
     }
 }
