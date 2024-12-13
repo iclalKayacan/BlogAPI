@@ -48,7 +48,6 @@ namespace BlogAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Blog>> PostBlog(CreateBlogDto createBlogDto)
         {
-            // DTO'dan Blog modeline veri haritalama
             var blog = new Blog
             {
                 Title = createBlogDto.Title,
@@ -65,30 +64,20 @@ namespace BlogAPI.Controllers
                     .ToListAsync();
             }
 
-            // Comments'i ekleme
-            if (createBlogDto.Comments != null)
-            {
-                blog.Comments = createBlogDto.Comments.Select(c => new Comment
-                {
-                    Content = c.Content,
-                    Author = c.Author,
-                    CreatedAt = DateTime.UtcNow
-                }).ToList();
-            }
-
             _context.Blogs.Add(blog);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetBlog", new { id = blog.Id }, blog);
         }
 
+
+        // PUT: api/Blogs/5
         // PUT: api/Blogs/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBlog(int id, CreateBlogDto updateBlogDto)
         {
             var blog = await _context.Blogs
                 .Include(b => b.Tags)
-                .Include(b => b.Comments)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
             if (blog == null)
@@ -108,17 +97,6 @@ namespace BlogAPI.Controllers
                 blog.Tags = await _context.Tags
                     .Where(t => updateBlogDto.TagIds.Contains(t.Id))
                     .ToListAsync();
-            }
-
-            // Comments'i güncelle (Örneğin ekleme yapılabilir, ancak silme desteklenmeyebilir)
-            if (updateBlogDto.Comments != null)
-            {
-                blog.Comments = updateBlogDto.Comments.Select(c => new Comment
-                {
-                    Content = c.Content,
-                    Author = c.Author,
-                    CreatedAt = DateTime.UtcNow
-                }).ToList();
             }
 
             _context.Entry(blog).State = EntityState.Modified;
@@ -141,6 +119,7 @@ namespace BlogAPI.Controllers
 
             return NoContent();
         }
+
 
         // DELETE: api/Blogs/5
         [HttpDelete("{id}")]

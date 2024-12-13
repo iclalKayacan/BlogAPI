@@ -44,12 +44,12 @@ namespace BlogAPI.Data
                 {
                     if (entry.State == EntityState.Added)
                     {
-                        blog.CreatedAt = DateTime.UtcNow;
+                        blog.CreatedAt = DateTime.Now;
                     }
 
                     if (entry.State == EntityState.Modified)
                     {
-                        blog.UpdatedAt = DateTime.UtcNow;
+                        blog.UpdatedAt = DateTime.Now;
                     }
                 }
             }
@@ -65,12 +65,12 @@ namespace BlogAPI.Data
                 {
                     if (entry.State == EntityState.Added)
                     {
-                        blog.CreatedAt = DateTime.UtcNow;
+                        blog.CreatedAt = DateTime.Now;
                     }
 
                     if (entry.State == EntityState.Modified)
                     {
-                        blog.UpdatedAt = DateTime.UtcNow;
+                        blog.UpdatedAt = DateTime.Now;
                     }
                 }
             }
