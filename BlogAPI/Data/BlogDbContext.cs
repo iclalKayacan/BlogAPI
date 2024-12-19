@@ -21,12 +21,15 @@ namespace BlogAPI.Data
             // Blog-Category Many-to-Many Relationship
             modelBuilder.Entity<Blog>()
                 .HasMany(b => b.Categories)
-                .WithMany(c => c.Blogs);
+                .WithMany(c => c.Blogs)
+                .UsingEntity(j => j.ToTable("BlogCategories"));
+
 
             // Blog-Tag Many-to-Many Relationship
             modelBuilder.Entity<Blog>()
                 .HasMany(b => b.Tags)
-                .WithMany(t => t.Blogs);
+                .WithMany(t => t.Blogs)
+                .UsingEntity(j => j.ToTable("BlogTags")); 
 
             // Blog-Comment Relationship
             modelBuilder.Entity<Comment>()

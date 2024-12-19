@@ -24,6 +24,7 @@ namespace BlogAPI.Controllers
             return await _context.Blogs
                 .Include(b => b.Tags)
                 .Include(b => b.Comments)
+                .Include(b => b.Categories)
                 .ToListAsync();
         }
 
@@ -34,6 +35,7 @@ namespace BlogAPI.Controllers
             var blog = await _context.Blogs
                 .Include(b => b.Tags)
                 .Include(b => b.Comments)
+                .Include(b => b.Categories)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
             if (blog == null)
@@ -78,25 +80,25 @@ namespace BlogAPI.Controllers
             return CreatedAtAction("GetBlog", new { id = blog.Id }, blog);
         }
 
-
         // PUT: api/Blogs/5
-[HttpPut("{id}")]
-public async Task<IActionResult> PutBlog(int id, CreateBlogDto updateBlogDto)
-{
-    var blog = await _context.Blogs
-        .Include(b => b.Tags)
-        .FirstOrDefaultAsync(b => b.Id == id);
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutBlog(int id, CreateBlogDto updateBlogDto)
+        {
+            var blog = await _context.Blogs
+                .Include(b => b.Tags)
+                .Include(b => b.Categories)
+                .FirstOrDefaultAsync(b => b.Id == id);
 
-    if (blog == null)
-    {
-        return NotFound();
-    }
+            if (blog == null)
+            {
+                return NotFound();
+            }
 
-    // Blog'un alanlarını DTO ile güncelle
-    blog.Title = updateBlogDto.Title;
-    blog.Content = updateBlogDto.Content;
-    blog.Author = updateBlogDto.Author;
-    blog.UpdatedAt = DateTime.Now;
+            // Blog'un alanlarını DTO ile güncelle
+            blog.Title = updateBlogDto.Title;
+            blog.Content = updateBlogDto.Content;
+            blog.Author = updateBlogDto.Author;
+            blog.UpdatedAt = DateTime.UtcNow;
 
             // Kategorileri güncelleme
             if (updateBlogDto.CategoryIds != null)
@@ -108,39 +110,42 @@ public async Task<IActionResult> PutBlog(int id, CreateBlogDto updateBlogDto)
 
             // Tags'i güncelle
             if (updateBlogDto.TagIds != null)
-    {
-        blog.Tags = await _context.Tags
-            .Where(t => updateBlogDto.TagIds.Contains(t.Id))
-            .ToListAsync();
-    }
+            {
+                blog.Tags = await _context.Tags
+                    .Where(t => updateBlogDto.TagIds.Contains(t.Id))
+                    .ToListAsync();
+            }
 
-    _context.Entry(blog).State = EntityState.Modified;
+            _context.Entry(blog).State = EntityState.Modified;
 
-    try
-    {
-        await _context.SaveChangesAsync();
-    }
-    catch (DbUpdateConcurrencyException)
-    {
-        if (!BlogExists(id))
-        {
-            return NotFound();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!BlogExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
-        else
-        {
-            throw;
-        }
-    }
-
-    return NoContent();
-}
-
 
         // DELETE: api/Blogs/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBlog(int id)
         {
-            var blog = await _context.Blogs.FindAsync(id);
+            var blog = await _context.Blogs
+                .Include(b => b.Tags)
+                .Include(b => b.Categories)
+                .FirstOrDefaultAsync(b => b.Id == id);
+
             if (blog == null)
             {
                 return NotFound();
@@ -151,9 +156,6 @@ public async Task<IActionResult> PutBlog(int id, CreateBlogDto updateBlogDto)
 
             return NoContent();
         }
-
-        
-
 
         private bool BlogExists(int id)
         {

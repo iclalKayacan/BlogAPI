@@ -8,6 +8,10 @@
         public int BlogId { get; set; } 
     }
 
-
+    public class UpdateCommentDto
+    {
+        public string Content { get; set; }
+        public string Author { get; set; }
+    }
 
 }
