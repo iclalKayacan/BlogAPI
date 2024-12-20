@@ -2,6 +2,8 @@
 using BlogAPI.Data;
 using BlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace BlogAPI.Controllers
 {
@@ -38,6 +40,7 @@ namespace BlogAPI.Controllers
         }
 
         // POST: api/Category
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Category>> CreateCategory(Category category)
         {

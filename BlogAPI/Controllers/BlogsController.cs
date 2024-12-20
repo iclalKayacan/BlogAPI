@@ -3,6 +3,8 @@ using BlogAPI.Models;
 using BlogAPI.DTOs; // DTO'lar eklendi
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace BlogAPI.Controllers
 {
@@ -18,6 +20,8 @@ namespace BlogAPI.Controllers
         }
 
         // GET: api/Blogs
+        [AllowAnonymous]
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Blog>>> GetBlogs()
         {
@@ -47,6 +51,8 @@ namespace BlogAPI.Controllers
         }
 
         // POST: api/Blogs
+        [Authorize(Roles = "Author")]
+
         [HttpPost]
         public async Task<ActionResult<Blog>> PostBlog(CreateBlogDto createBlogDto)
         {
