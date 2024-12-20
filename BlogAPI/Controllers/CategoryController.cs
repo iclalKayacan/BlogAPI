@@ -3,6 +3,7 @@ using BlogAPI.Data;
 using BlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using BlogAPI.DTOs;
 
 namespace BlogAPI.Controllers
 {
@@ -52,14 +53,19 @@ namespace BlogAPI.Controllers
         }
 
         // PUT: api/Category/{id}
-        [Authorize(Roles = "Admin")] // Yalnızca Admin kullanıcılar kategori güncelleyebilir
+        //[Authorize(Roles = "Admin")] 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(int id, Category category)
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoryUpdateDto categoryDto)
         {
-            if (id != category.Id)
+            var category = await _context.Categories.FindAsync(id);
+
+            if (category == null)
             {
-                return BadRequest();
+                return NotFound();
             }
+
+            category.Name = categoryDto.Name;
+            category.Color = categoryDto.Color;
 
             _context.Entry(category).State = EntityState.Modified;
 
@@ -81,6 +87,7 @@ namespace BlogAPI.Controllers
 
             return NoContent();
         }
+
 
         // DELETE: api/Category/{id}
         [Authorize(Roles = "Admin")] // Yalnızca Admin kullanıcılar kategori silebilir

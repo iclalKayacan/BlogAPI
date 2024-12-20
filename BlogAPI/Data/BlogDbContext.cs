@@ -16,6 +16,7 @@ namespace BlogAPI.Data
         public DbSet<User> Users { get; set; }
 
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -38,6 +39,8 @@ namespace BlogAPI.Data
                 .HasOne(c => c.Blog)
                 .WithMany(b => b.Comments)
                 .HasForeignKey(c => c.BlogId);
+
+            
         }
         public override int SaveChanges()
         {

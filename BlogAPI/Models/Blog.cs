@@ -6,6 +6,8 @@ public class Blog
     public string Title { get; set; }
     public string Content { get; set; }
     public string Author { get; set; }
+    public string Summary { get; set; }
+    public string ImageUrl { get; set; }
     public List<Tag> Tags { get; set; } = new List<Tag>();
     public List<Category> Categories { get; set; } = new List<Category>();
 

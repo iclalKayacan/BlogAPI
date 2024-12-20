@@ -6,8 +6,10 @@ namespace BlogAPI.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public string Color { get; set; }
+
         [JsonIgnore]
         public List<Blog> Blogs { get; set; } = new List<Blog>();
     }
-
 }

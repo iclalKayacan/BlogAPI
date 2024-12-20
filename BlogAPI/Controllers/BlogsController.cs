@@ -60,10 +60,11 @@ namespace BlogAPI.Controllers
                 Title = createBlogDto.Title,
                 Content = createBlogDto.Content,
                 Author = createBlogDto.Author,
+                Summary = createBlogDto.Summary,
+                ImageUrl = createBlogDto.ImageUrl, 
                 CreatedAt = DateTime.UtcNow
             };
 
-            // Kategorileri ekleme
             if (createBlogDto.CategoryIds != null)
             {
                 blog.Categories = await _context.Categories
@@ -71,7 +72,6 @@ namespace BlogAPI.Controllers
                     .ToListAsync();
             }
 
-            // Tags'i ekleme
             if (createBlogDto.TagIds != null)
             {
                 blog.Tags = await _context.Tags
@@ -85,8 +85,10 @@ namespace BlogAPI.Controllers
             return CreatedAtAction("GetBlog", new { id = blog.Id }, blog);
         }
 
+
+
         // PUT: api/Blogs/5
-        [Authorize(Roles = "Author")]
+        //[Authorize(Roles = "Author")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBlog(int id, CreateBlogDto updateBlogDto)
         {
@@ -100,13 +102,12 @@ namespace BlogAPI.Controllers
                 return NotFound();
             }
 
-            // Blog'un alanlarını DTO ile güncelle
             blog.Title = updateBlogDto.Title;
             blog.Content = updateBlogDto.Content;
             blog.Author = updateBlogDto.Author;
+            blog.Summary = updateBlogDto.Summary; 
             blog.UpdatedAt = DateTime.UtcNow;
 
-            // Kategorileri güncelleme
             if (updateBlogDto.CategoryIds != null)
             {
                 blog.Categories = await _context.Categories
@@ -114,7 +115,6 @@ namespace BlogAPI.Controllers
                     .ToListAsync();
             }
 
-            // Tags'i güncelle
             if (updateBlogDto.TagIds != null)
             {
                 blog.Tags = await _context.Tags
@@ -142,6 +142,7 @@ namespace BlogAPI.Controllers
 
             return NoContent();
         }
+
 
         // DELETE: api/Blogs/5
         [Authorize(Roles = "Admin")]

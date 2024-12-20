@@ -1,11 +1,19 @@
 {
   "Version": 1,
-  "Hash": "/bwfebzdcsatUeDz7DNbVOXSdgc+0Tp8PfaLhs3pu8E=",
+  "Hash": "z6I9Gn2qXR7vT72XIE6wMxg9PWmoGfUb+4BSLeQ1bck=",
   "Source": "BlogAPI",
   "BasePath": "_content/BlogAPI",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "BlogAPI\\wwwroot",
+      "Source": "BlogAPI",
+      "ContentRoot": "C:\\Users\\iclal kayacan\\source\\repos\\BlogAPI\\BlogAPI\\wwwroot\\",
+      "BasePath": "_content/BlogAPI",
+      "Pattern": "**"
+    }
+  ],
   "Assets": []
 }

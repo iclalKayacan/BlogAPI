@@ -6,68 +6,84 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
+using BlogAPI.Data;
 
 namespace BlogAPI.Controllers
 {
-
-    namespace BlogAPI.Controllers
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthController : ControllerBase
     {
-        [Route("api/[controller]")]
-        [ApiController]
-        public class AuthController : ControllerBase
-        {
-            private readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
+        private readonly BlogDbContext _context; // DbContext'i dahil ettik
 
-            // Örnek kullanıcı verileri (gerçek projede veritabanından alınır)
-            private static List<User> Users = new List<User>
+        public AuthController(IConfiguration configuration, BlogDbContext context)
         {
-            new User { Id = 1, Username = "admin", Password = "password", Role = "Admin" },
-            new User { Id = 2, Username = "author", Password = "password", Role = "Author" },
-            new User { Id = 3, Username = "user", Password = "password", Role = "User" }
-        };
+            _configuration = configuration;
+            _context = context; // DbContext'i enjekte ettik
+        }
 
-            public AuthController(IConfiguration configuration)
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        {
+            // Kullanıcı doğrulama
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == loginDto.Username && u.Password == loginDto.Password);
+            if (user == null)
             {
-                _configuration = configuration;
+                return Unauthorized("Kullanıcı adı veya şifre hatalı!");
             }
 
-            [HttpPost("login")]
-            public IActionResult Login([FromBody] LoginDto loginDto)
-            {
-                // Kullanıcı doğrulama
-                var user = Users.FirstOrDefault(u => u.Username == loginDto.Username && u.Password == loginDto.Password);
-                if (user == null)
-                {
-                    return Unauthorized("Kullanıcı adı veya şifre hatalı!");
-                }
+            // JWT oluşturma
+            var token = GenerateJwtToken(user);
+            return Ok(new { Token = token });
+        }
 
-                // JWT oluşturma
-                var token = GenerateJwtToken(user);
-                return Ok(new { Token = token });
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
+        {
+            // Kullanıcı adı kontrolü
+            if (await _context.Users.AnyAsync(u => u.Username == registerDto.Username))
+            {
+                return BadRequest("Kullanıcı adı zaten mevcut!");
             }
 
-            // JWT Token Oluşturma Metodu
-            private string GenerateJwtToken(User user)
+            // Yeni kullanıcı oluşturma
+            var newUser = new User
             {
-                var claims = new[]
-                {
+                Username = registerDto.Username,
+                Password = registerDto.Password, // Şifreleme eklenebilir (ör. BCrypt)
+                FullName = registerDto.FullName,
+                Role = "User" // Varsayılan olarak "User" rolü atanıyor
+            };
+
+            // Kullanıcıyı veritabanına ekleme
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+
+            return Ok("Kullanıcı başarıyla oluşturuldu!");
+        }
+
+        // JWT Token Oluşturma Metodu
+        private string GenerateJwtToken(User user)
+        {
+            var claims = new[]
+            {
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Role, user.Role)
             };
 
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-                var token = new JwtSecurityToken(
-                    issuer: _configuration["Jwt:Issuer"],
-                    audience: _configuration["Jwt:Audience"],
-                    claims: claims,
-                    expires: DateTime.Now.AddMinutes(60),
-                    signingCredentials: creds);
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(60),
+                signingCredentials: creds);
 
-                return new JwtSecurityTokenHandler().WriteToken(token);
-            }
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
-
 }

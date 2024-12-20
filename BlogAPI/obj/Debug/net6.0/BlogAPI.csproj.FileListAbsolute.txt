@@ -75,3 +75,4 @@ C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\obj\Debug\net6.0\refint\Blog
 C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\obj\Debug\net6.0\BlogAPI.pdb
 C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\obj\Debug\net6.0\BlogAPI.genruntimeconfig.cache
 C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\obj\Debug\net6.0\ref\BlogAPI.dll
+C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\bin\Debug\net6.0\BlogAPI.staticwebassets.runtime.json
