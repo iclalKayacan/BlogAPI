@@ -21,7 +21,6 @@ namespace BlogAPI.Controllers
 
         // GET: api/Blogs
         [AllowAnonymous]
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Blog>>> GetBlogs()
         {
@@ -33,6 +32,7 @@ namespace BlogAPI.Controllers
         }
 
         // GET: api/Blogs/5
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<Blog>> GetBlog(int id)
         {
@@ -52,7 +52,6 @@ namespace BlogAPI.Controllers
 
         // POST: api/Blogs
         [Authorize(Roles = "Author")]
-
         [HttpPost]
         public async Task<ActionResult<Blog>> PostBlog(CreateBlogDto createBlogDto)
         {
@@ -87,6 +86,7 @@ namespace BlogAPI.Controllers
         }
 
         // PUT: api/Blogs/5
+        [Authorize(Roles = "Author")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBlog(int id, CreateBlogDto updateBlogDto)
         {
@@ -144,6 +144,7 @@ namespace BlogAPI.Controllers
         }
 
         // DELETE: api/Blogs/5
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBlog(int id)
         {

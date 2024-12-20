@@ -3,7 +3,6 @@ using BlogAPI.Data;
 using BlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-using System.Data;
 
 namespace BlogAPI.Controllers
 {
@@ -19,6 +18,7 @@ namespace BlogAPI.Controllers
         }
 
         // GET: api/Category
+        [AllowAnonymous] // Anonim kullanıcılar kategorileri listeleyebilir
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
@@ -26,6 +26,7 @@ namespace BlogAPI.Controllers
         }
 
         // GET: api/Category/{id}
+        [AllowAnonymous] // Anonim kullanıcılar tek bir kategoriye erişebilir
         [HttpGet("{id}")]
         public async Task<ActionResult<Category>> GetCategory(int id)
         {
@@ -40,7 +41,7 @@ namespace BlogAPI.Controllers
         }
 
         // POST: api/Category
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")] // Yalnızca Admin kullanıcılar kategori oluşturabilir
         [HttpPost]
         public async Task<ActionResult<Category>> CreateCategory(Category category)
         {
@@ -51,6 +52,7 @@ namespace BlogAPI.Controllers
         }
 
         // PUT: api/Category/{id}
+        [Authorize(Roles = "Admin")] // Yalnızca Admin kullanıcılar kategori güncelleyebilir
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCategory(int id, Category category)
         {
@@ -81,6 +83,7 @@ namespace BlogAPI.Controllers
         }
 
         // DELETE: api/Category/{id}
+        [Authorize(Roles = "Admin")] // Yalnızca Admin kullanıcılar kategori silebilir
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {

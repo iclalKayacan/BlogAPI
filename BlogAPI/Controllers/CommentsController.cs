@@ -3,6 +3,7 @@ using BlogAPI.DTOs;
 using BlogAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlogAPI.Controllers
 {
@@ -18,6 +19,7 @@ namespace BlogAPI.Controllers
         }
 
         // POST: api/comments
+        [Authorize] // Yorum eklemek için kullanıcı doğrulama gereksinimi
         [HttpPost]
         public async Task<ActionResult<Comment>> PostComment(CreateCommentDto createCommentDto)
         {
@@ -44,6 +46,7 @@ namespace BlogAPI.Controllers
         }
 
         // PUT: api/comments/{id}
+        [Authorize] // Güncelleme işlemi için doğrulama
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateComment(int id, UpdateCommentDto updateCommentDto)
         {
@@ -53,9 +56,16 @@ namespace BlogAPI.Controllers
                 return NotFound($"Comment with ID {id} not found.");
             }
 
+            // Kullanıcının yetkisini kontrol et
+            var currentUser = User.Identity?.Name;
+            if (comment.Author != currentUser && !User.IsInRole("Admin"))
+            {
+                return Forbid("You are not allowed to update this comment.");
+            }
+
             // Yorum güncelle
             comment.Content = updateCommentDto.Content;
-            comment.Author = updateCommentDto.Author;
+            comment.Author = comment.Author; // Author değiştirilmemeli
             comment.CreatedAt = DateTime.UtcNow;
 
             _context.Entry(comment).State = EntityState.Modified;
@@ -80,6 +90,7 @@ namespace BlogAPI.Controllers
         }
 
         // DELETE: api/comments/{id}
+        [Authorize] // Silme işlemi için doğrulama
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComment(int id)
         {
@@ -87,6 +98,13 @@ namespace BlogAPI.Controllers
             if (comment == null)
             {
                 return NotFound($"Comment with ID {id} not found.");
+            }
+
+            // Kullanıcının yetkisini kontrol et
+            var currentUser = User.Identity?.Name;
+            if (comment.Author != currentUser && !User.IsInRole("Admin"))
+            {
+                return Forbid("You are not allowed to delete this comment.");
             }
 
             _context.Comments.Remove(comment);
