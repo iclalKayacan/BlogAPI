@@ -36,8 +36,20 @@ namespace BlogAPI.Controllers
 
             // JWT oluşturma
             var token = GenerateJwtToken(user);
-            return Ok(new { Token = token });
+
+            // Kullanıcı bilgileri ve token'ı dön
+            return Ok(new
+            {
+                Token = token,
+                User = new
+                {
+                    Username = user.Username,
+                    FullName = user.FullName,
+                    Role = user.Role
+                }
+            });
         }
+
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)

@@ -19,22 +19,22 @@ namespace BlogAPI.Controllers
         }
 
         // POST: api/comments
-        [Authorize] // Yorum eklemek için kullanıcı doğrulama gereksinimi
         [HttpPost]
+        [Authorize] // Yorum eklemek için giriş zorunlu
         public async Task<ActionResult<Comment>> PostComment(CreateCommentDto createCommentDto)
         {
-            // Blog'un var olup olmadığını kontrol et
             var blog = await _context.Blogs.FindAsync(createCommentDto.BlogId);
             if (blog == null)
             {
                 return NotFound($"Blog with ID {createCommentDto.BlogId} not found.");
             }
 
-            // Yeni yorum oluştur
+            var currentUser = User.Identity.Name; // Giriş yapan kullanıcının adı
+
             var comment = new Comment
             {
                 Content = createCommentDto.Content,
-                Author = createCommentDto.Author,
+                Author = currentUser,
                 BlogId = createCommentDto.BlogId,
                 CreatedAt = DateTime.UtcNow
             };
@@ -45,8 +45,8 @@ namespace BlogAPI.Controllers
             return CreatedAtAction(nameof(PostComment), new { id = comment.Id }, comment);
         }
 
+
         // PUT: api/comments/{id}
-        [Authorize] // Güncelleme işlemi için doğrulama
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateComment(int id, UpdateCommentDto updateCommentDto)
         {
@@ -90,7 +90,6 @@ namespace BlogAPI.Controllers
         }
 
         // DELETE: api/comments/{id}
-        [Authorize] // Silme işlemi için doğrulama
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComment(int id)
         {

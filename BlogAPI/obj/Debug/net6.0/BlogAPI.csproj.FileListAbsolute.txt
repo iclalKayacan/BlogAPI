@@ -76,3 +76,14 @@ C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\obj\Debug\net6.0\BlogAPI.pdb
 C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\obj\Debug\net6.0\BlogAPI.genruntimeconfig.cache
 C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\obj\Debug\net6.0\ref\BlogAPI.dll
 C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\bin\Debug\net6.0\BlogAPI.staticwebassets.runtime.json
+C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\bin\Debug\net6.0\FirebaseAdmin.dll
+C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\bin\Debug\net6.0\Google.Api.Gax.dll
+C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\bin\Debug\net6.0\Google.Api.Gax.Rest.dll
+C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\bin\Debug\net6.0\Google.Apis.dll
+C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\bin\Debug\net6.0\Google.Apis.Auth.dll
+C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\bin\Debug\net6.0\Google.Apis.Core.dll
+C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\bin\Debug\net6.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\bin\Debug\net6.0\System.CodeDom.dll
+C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\bin\Debug\net6.0\System.Management.dll
+C:\Users\iclal kayacan\source\repos\BlogAPI\BlogAPI\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Management.dll

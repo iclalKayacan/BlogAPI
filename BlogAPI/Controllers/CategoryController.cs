@@ -39,10 +39,29 @@ namespace BlogAPI.Controllers
             }
 
             return category;
+
+        }
+        [HttpGet("{id}/blogs")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<Blog>>> GetBlogsByCategory(int id)
+        {
+            var blogs = await _context.Blogs
+                .Include(b => b.Categories) // Blog ile ilişkili kategorileri dahil et
+                .Where(b => b.Categories.Any(c => c.Id == id)) // Kategoriye göre filtrele
+                .ToListAsync();
+
+            if (!blogs.Any())
+            {
+                return NotFound("Bu kategoriye ait blog bulunamadı.");
+            }
+
+            return Ok(blogs);
         }
 
+
+
         // POST: api/Category
-        [Authorize(Roles = "Admin")] // Yalnızca Admin kullanıcılar kategori oluşturabilir
+        //[Authorize(Roles = "Admin")] // Yalnızca Admin kullanıcılar kategori oluşturabilir
         [HttpPost]
         public async Task<ActionResult<Category>> CreateCategory(Category category)
         {
