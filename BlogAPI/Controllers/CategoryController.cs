@@ -18,13 +18,23 @@ namespace BlogAPI.Controllers
             _context = context;
         }
 
-        // GET: api/Category
-        [AllowAnonymous] // Anonim kullanıcılar kategorileri listeleyebilir
+        [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<IActionResult> GetCategories()
         {
-            return await _context.Categories.ToListAsync();
+            var categories = await _context.Categories
+                .Select(c => new
+                {
+                    id = c.Id,
+                    name = c.Name,
+                    color = c.Color
+                })
+                .ToListAsync();
+
+            return Ok(categories);
         }
+
+
 
         // GET: api/Category/{id}
         [AllowAnonymous] // Anonim kullanıcılar tek bir kategoriye erişebilir
@@ -57,6 +67,7 @@ namespace BlogAPI.Controllers
 
             return Ok(blogs);
         }
+
 
 
 
@@ -124,6 +135,7 @@ namespace BlogAPI.Controllers
 
             return NoContent();
         }
+
 
         private bool CategoryExists(int id)
         {

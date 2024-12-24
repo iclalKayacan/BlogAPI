@@ -3,6 +3,7 @@ using BlogAPI.Models;
 using BlogAPI.Data; // Veritabanı context'inizi ekleyin
 using Microsoft.EntityFrameworkCore;
 using System;
+using BlogAPI.DTOs;
 
 namespace BlogAPI.Controllers
 {
@@ -21,9 +22,44 @@ namespace BlogAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTags()
         {
-            var tags = await _context.Tags.ToListAsync();
+            var tags = await _context.Tags
+                .Select(tag => new TagDTO
+                {
+                    Id = tag.Id,
+                    Name = tag.Name
+                })
+                .ToListAsync();
+
             return Ok(tags);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateTag([FromBody] TagDTO TagDto)
+        {
+            if (string.IsNullOrEmpty(TagDto.Name))
+            {
+                return BadRequest("Tag name is required.");
+            }
+
+            // Yeni bir Tag nesnesi oluşturun ve veritabanına ekleyin
+            var tag = new Tag
+            {
+                Name = TagDto.Name
+            };
+
+            _context.Tags.Add(tag);
+            await _context.SaveChangesAsync();
+
+            // Sadece eklenen Tag'in Id ve Name bilgilerini döndürün
+            var responseDto = new TagDTO
+            {
+                Id = tag.Id,
+                Name = tag.Name
+            };
+
+            return CreatedAtAction(nameof(GetTags), new { id = tag.Id }, responseDto);
+        }
+
 
         // Blog'a tag ekleme
         [HttpPost("{blogId}/add-tags")]
