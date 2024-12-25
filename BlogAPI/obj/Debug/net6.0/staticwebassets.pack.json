@@ -1,0 +1,65 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\iclal kayacan\\source\\repos\\BlogAPI\\BlogAPI\\wwwroot\\uploads\\17ff1cef-5696-4641-bdd4-b5243751060f.jpg",
+      "PackagePath": "staticwebassets\\uploads\\17ff1cef-5696-4641-bdd4-b5243751060f.jpg"
+    },
+    {
+      "Id": "C:\\Users\\iclal kayacan\\source\\repos\\BlogAPI\\BlogAPI\\wwwroot\\uploads\\3eba3be3-e114-41cf-96f6-ebb28de474ab.jpg",
+      "PackagePath": "staticwebassets\\uploads\\3eba3be3-e114-41cf-96f6-ebb28de474ab.jpg"
+    },
+    {
+      "Id": "C:\\Users\\iclal kayacan\\source\\repos\\BlogAPI\\BlogAPI\\wwwroot\\uploads\\4a1a9be6-0a15-4837-b7fc-7ef5adc3bff6.png",
+      "PackagePath": "staticwebassets\\uploads\\4a1a9be6-0a15-4837-b7fc-7ef5adc3bff6.png"
+    },
+    {
+      "Id": "C:\\Users\\iclal kayacan\\source\\repos\\BlogAPI\\BlogAPI\\wwwroot\\uploads\\7c294c5f-db93-49fe-9778-5a3a69919595.jpg",
+      "PackagePath": "staticwebassets\\uploads\\7c294c5f-db93-49fe-9778-5a3a69919595.jpg"
+    },
+    {
+      "Id": "C:\\Users\\iclal kayacan\\source\\repos\\BlogAPI\\BlogAPI\\wwwroot\\uploads\\9fb33ece-ba15-4d34-b969-24634b05caf4.jpg",
+      "PackagePath": "staticwebassets\\uploads\\9fb33ece-ba15-4d34-b969-24634b05caf4.jpg"
+    },
+    {
+      "Id": "C:\\Users\\iclal kayacan\\source\\repos\\BlogAPI\\BlogAPI\\wwwroot\\uploads\\a922eb2a-3eef-43a8-8370-b31735d799a2.jpg",
+      "PackagePath": "staticwebassets\\uploads\\a922eb2a-3eef-43a8-8370-b31735d799a2.jpg"
+    },
+    {
+      "Id": "C:\\Users\\iclal kayacan\\source\\repos\\BlogAPI\\BlogAPI\\wwwroot\\uploads\\b667c18e-e370-4da2-9cf9-fdb50c40a8af.jpg",
+      "PackagePath": "staticwebassets\\uploads\\b667c18e-e370-4da2-9cf9-fdb50c40a8af.jpg"
+    },
+    {
+      "Id": "C:\\Users\\iclal kayacan\\source\\repos\\BlogAPI\\BlogAPI\\wwwroot\\uploads\\c59a5f18-84ac-49df-b432-8b1c32bd68ae.jpg",
+      "PackagePath": "staticwebassets\\uploads\\c59a5f18-84ac-49df-b432-8b1c32bd68ae.jpg"
+    },
+    {
+      "Id": "C:\\Users\\iclal kayacan\\source\\repos\\BlogAPI\\BlogAPI\\wwwroot\\uploads\\d4e81c9e-35f8-41a5-8811-41ba14f3877f.jpg",
+      "PackagePath": "staticwebassets\\uploads\\d4e81c9e-35f8-41a5-8811-41ba14f3877f.jpg"
+    },
+    {
+      "Id": "C:\\Users\\iclal kayacan\\source\\repos\\BlogAPI\\BlogAPI\\wwwroot\\uploads\\dbe3f265-4ad1-41bf-b46e-67dd1362d39c.jpg",
+      "PackagePath": "staticwebassets\\uploads\\dbe3f265-4ad1-41bf-b46e-67dd1362d39c.jpg"
+    },
+    {
+      "Id": "C:\\Users\\iclal kayacan\\source\\repos\\BlogAPI\\BlogAPI\\wwwroot\\uploads\\fd76fc93-468d-42e7-9816-83f3ca198887.png",
+      "PackagePath": "staticwebassets\\uploads\\fd76fc93-468d-42e7-9816-83f3ca198887.png"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.BlogAPI.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.build.BlogAPI.props",
+      "PackagePath": "build\\BlogAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildMultiTargeting.BlogAPI.props",
+      "PackagePath": "buildMultiTargeting\\BlogAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildTransitive.BlogAPI.props",
+      "PackagePath": "buildTransitive\\BlogAPI.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

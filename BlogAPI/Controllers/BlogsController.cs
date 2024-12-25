@@ -51,38 +51,32 @@ namespace BlogAPI.Controllers
         }
 
         // POST: api/Blogs
-        [Authorize(Roles = "Author")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<Blog>> PostBlog(CreateBlogDto createBlogDto)
+        public async Task<ActionResult<Blog>> PostBlog([FromBody] CreateBlogDto createBlogDto)
         {
-            var blog = new Blog
+            try
             {
-                Title = createBlogDto.Title,
-                Content = createBlogDto.Content,
-                Author = createBlogDto.Author,
-                Summary = createBlogDto.Summary,
-                ImageUrl = createBlogDto.ImageUrl, 
-                CreatedAt = DateTime.UtcNow
-            };
+                var blog = new Blog
+                {
+                    Title = createBlogDto.Title,
+                    Content = createBlogDto.Content,
+                    Author = createBlogDto.Author,
+                    Summary = createBlogDto.Summary ?? createBlogDto.Content.Substring(0, Math.Min(200, createBlogDto.Content.Length)),
+                    ImageUrl = createBlogDto.ImageUrl,
+                    Status = "taslak", // Varsayılan durum
+                    CreatedAt = DateTime.UtcNow
+                };
 
-            if (createBlogDto.CategoryIds != null)
-            {
-                blog.Categories = await _context.Categories
-                    .Where(c => createBlogDto.CategoryIds.Contains(c.Id))
-                    .ToListAsync();
+                _context.Blogs.Add(blog);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetBlog), new { id = blog.Id }, blog);
             }
-
-            if (createBlogDto.TagIds != null)
+            catch (Exception ex)
             {
-                blog.Tags = await _context.Tags
-                    .Where(t => createBlogDto.TagIds.Contains(t.Id))
-                    .ToListAsync();
+                return StatusCode(500, new { message = ex.Message });
             }
-
-            _context.Blogs.Add(blog);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetBlog", new { id = blog.Id }, blog);
         }
 
 
