@@ -10,7 +10,7 @@ public class Blog
     public string ImageUrl { get; set; }
     public string Status { get; set; } = "taslak";
     public List<Tag> Tags { get; set; } = new List<Tag>();
-    public List<Category> Categories { get; set; } = new List<Category>();
+    public List<Category> Categories { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime? UpdatedAt { get; set; }

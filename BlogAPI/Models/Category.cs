@@ -9,7 +9,8 @@ namespace BlogAPI.Models
 
         public string Color { get; set; }
 
-        [JsonIgnore]
-        public List<Blog> Blogs { get; set; } = new List<Blog>();
+        public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
+
+
     }
 }

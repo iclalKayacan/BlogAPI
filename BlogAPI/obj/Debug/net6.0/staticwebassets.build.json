@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "TvP5EMCZPV2SNNwaf82lsxN9TcxIbMpriBhD7SlHAgM=",
+  "Hash": "KTVaWttOMaJffSePRn1GiPOVWHuXnutCsGpgmQEJSXs=",
   "Source": "BlogAPI",
   "BasePath": "_content/BlogAPI",
   "Mode": "Default",
@@ -117,6 +117,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\a922eb2a-3eef-43a8-8370-b31735d799a2.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\iclal kayacan\\source\\repos\\BlogAPI\\BlogAPI\\wwwroot\\uploads\\a99b1760-1a60-472f-9c3a-9a1df8783324.jpg",
+      "SourceId": "BlogAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\iclal kayacan\\source\\repos\\BlogAPI\\BlogAPI\\wwwroot\\",
+      "BasePath": "_content/BlogAPI",
+      "RelativePath": "uploads/a99b1760-1a60-472f-9c3a-9a1df8783324.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\a99b1760-1a60-472f-9c3a-9a1df8783324.jpg"
     },
     {
       "Identity": "C:\\Users\\iclal kayacan\\source\\repos\\BlogAPI\\BlogAPI\\wwwroot\\uploads\\b667c18e-e370-4da2-9cf9-fdb50c40a8af.jpg",

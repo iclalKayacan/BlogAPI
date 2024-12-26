@@ -120,20 +120,37 @@ namespace BlogAPI.Controllers
 
 
         // DELETE: api/Category/{id}
-        [Authorize(Roles = "Admin")] // Yalnızca Admin kullanıcılar kategori silebilir
+         [Authorize(Roles = "Admin")] 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
+            try
             {
-                return NotFound();
+                var category = await _context.Categories
+                    .Include(c => c.Blogs) // İlişkili blogları getir
+                    .FirstOrDefaultAsync(c => c.Id == id);
+
+                if (category == null)
+                {
+                    return NotFound("Kategori bulunamadı.");
+                }
+
+                // Önce blog-kategori ilişkilerini kaldır
+                foreach (var blog in category.Blogs.ToList())
+                {
+                    blog.Categories.Remove(category);
+                }
+
+                // Sonra kategoriyi sil
+                _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Kategori başarıyla silindi" });
             }
-
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Kategori silinirken bir hata oluştu: " + ex.Message });
+            }
         }
 
 

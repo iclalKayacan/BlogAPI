@@ -24,11 +24,19 @@ namespace BlogAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Blog>>> GetBlogs()
         {
-            return await _context.Blogs
-                .Include(b => b.Tags)
-                .Include(b => b.Comments)
-                .Include(b => b.Categories)
-                .ToListAsync();
+            try
+            {
+                var blogs = await _context.Blogs
+                    .Include(b => b.Categories)  // Kategorileri include et
+                    .OrderByDescending(b => b.CreatedAt)
+                    .ToListAsync();
+
+                return Ok(blogs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
 
         // GET: api/Blogs/5
@@ -36,19 +44,26 @@ namespace BlogAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Blog>> GetBlog(int id)
         {
-            var blog = await _context.Blogs
-                .Include(b => b.Tags)
-                .Include(b => b.Comments)
-                .Include(b => b.Categories)
-                .FirstOrDefaultAsync(b => b.Id == id);
-
-            if (blog == null)
+            try
             {
-                return NotFound();
-            }
+                var blog = await _context.Blogs
+                    .Include(b => b.Categories)
+                    .Include(b => b.Comments)
+                    .FirstOrDefaultAsync(b => b.Id == id);
 
-            return blog;
+                if (blog == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(blog);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
+
 
         // POST: api/Blogs
         [Authorize(Roles = "Admin")]
@@ -64,14 +79,28 @@ namespace BlogAPI.Controllers
                     Author = createBlogDto.Author,
                     Summary = createBlogDto.Summary ?? createBlogDto.Content.Substring(0, Math.Min(200, createBlogDto.Content.Length)),
                     ImageUrl = createBlogDto.ImageUrl,
-                    Status = "taslak", // Varsayılan durum
+                    Status = "taslak",
                     CreatedAt = DateTime.UtcNow
                 };
+
+                // Kategorileri ekle
+                if (createBlogDto.CategoryIds != null && createBlogDto.CategoryIds.Any())
+                {
+                    var categories = await _context.Categories
+                        .Where(c => createBlogDto.CategoryIds.Contains(c.Id))
+                        .ToListAsync();
+                    blog.Categories = categories;
+                }
 
                 _context.Blogs.Add(blog);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetBlog), new { id = blog.Id }, blog);
+                // Blog'u kategorileriyle birlikte getir
+                var createdBlog = await _context.Blogs
+                    .Include(b => b.Categories)
+                    .FirstOrDefaultAsync(b => b.Id == blog.Id);
+
+                return CreatedAtAction(nameof(GetBlog), new { id = blog.Id }, createdBlog);
             }
             catch (Exception ex)
             {
