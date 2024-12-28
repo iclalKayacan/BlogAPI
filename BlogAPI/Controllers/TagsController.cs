@@ -61,26 +61,31 @@ namespace BlogAPI.Controllers
         }
 
 
-        // Blog'a tag ekleme
-        [HttpPost("{blogId}/add-tags")]
-        public async Task<IActionResult> AddTagsToBlog(int blogId, [FromBody] List<int> tagIds)
+        [HttpPost("{blogId}/addTag")]
+        public async Task<IActionResult> AddTagToBlog(int blogId, int tagId)
         {
-            var blog = await _context.Blogs.Include(b => b.Tags).FirstOrDefaultAsync(b => b.Id == blogId);
+            var blog = await _context.Blogs
+                .Include(b => b.Tags) // İlişkili tagleri yükle
+                .FirstOrDefaultAsync(b => b.Id == blogId);
 
-            if (blog == null) return NotFound("Blog bulunamadı!");
-
-            var tags = await _context.Tags.Where(t => tagIds.Contains(t.Id)).ToListAsync();
-
-            foreach (var tag in tags)
+            if (blog == null)
             {
-                if (!blog.Tags.Any(t => t.Id == tag.Id))
-                {
-                    blog.Tags.Add(tag);
-                }
+                return NotFound("Blog bulunamadı.");
             }
 
-            await _context.SaveChangesAsync();
-            return Ok(blog);
+            var tag = await _context.Tags.FindAsync(tagId);
+            if (tag == null)
+            {
+                return NotFound("Tag bulunamadı.");
+            }
+
+            if (!blog.Tags.Contains(tag))
+            {
+                blog.Tags.Add(tag);
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok(new { message = "Tag başarıyla blog'a eklendi." });
         }
     }
 }

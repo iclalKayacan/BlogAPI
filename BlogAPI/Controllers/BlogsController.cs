@@ -27,7 +27,7 @@ namespace BlogAPI.Controllers
             try
             {
                 var blogs = await _context.Blogs
-                    .Include(b => b.Categories)  // Kategorileri include et
+                    .Include(b => b.Categories)  
                     .OrderByDescending(b => b.CreatedAt)
                     .ToListAsync();
 
@@ -47,6 +47,7 @@ namespace BlogAPI.Controllers
             try
             {
                 var blog = await _context.Blogs
+                    .Include(b => b.Tags) 
                     .Include(b => b.Categories)
                     .Include(b => b.Comments)
                     .FirstOrDefaultAsync(b => b.Id == id);
@@ -66,7 +67,7 @@ namespace BlogAPI.Controllers
 
 
         // POST: api/Blogs
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Blog>> PostBlog([FromBody] CreateBlogDto createBlogDto)
         {
@@ -168,7 +169,7 @@ namespace BlogAPI.Controllers
 
 
         // DELETE: api/Blogs/5
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBlog(int id)
         {
