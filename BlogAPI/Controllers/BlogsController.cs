@@ -1,6 +1,6 @@
 ﻿using BlogAPI.Data;
 using BlogAPI.Models;
-using BlogAPI.DTOs; // DTO'lar eklendi
+using BlogAPI.DTOs; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
@@ -68,6 +68,7 @@ namespace BlogAPI.Controllers
 
         // POST: api/Blogs
         //[Authorize(Roles = "Admin")]
+        // POST: api/Blogs
         [HttpPost]
         public async Task<ActionResult<Blog>> PostBlog([FromBody] CreateBlogDto createBlogDto)
         {
@@ -78,9 +79,9 @@ namespace BlogAPI.Controllers
                     Title = createBlogDto.Title,
                     Content = createBlogDto.Content,
                     Author = createBlogDto.Author,
-                    Summary = createBlogDto.Summary ?? createBlogDto.Content.Substring(0, Math.Min(200, createBlogDto.Content.Length)),
+                    Summary = createBlogDto.Summary
+                              ?? createBlogDto.Content.Substring(0, Math.Min(200, createBlogDto.Content.Length)),
                     ImageUrl = createBlogDto.ImageUrl,
-                    Status = "taslak",
                     CreatedAt = DateTime.UtcNow
                 };
 
@@ -93,12 +94,22 @@ namespace BlogAPI.Controllers
                     blog.Categories = categories;
                 }
 
+                // **Etiketleri ekle (Eksik olan kısım)**
+                if (createBlogDto.TagIds != null && createBlogDto.TagIds.Any())
+                {
+                    var tags = await _context.Tags
+                        .Where(t => createBlogDto.TagIds.Contains(t.Id))
+                        .ToListAsync();
+                    blog.Tags = tags;
+                }
+
                 _context.Blogs.Add(blog);
                 await _context.SaveChangesAsync();
 
-                // Blog'u kategorileriyle birlikte getir
+                // Blog'u kategorileri ve etiketleriyle birlikte getir
                 var createdBlog = await _context.Blogs
                     .Include(b => b.Categories)
+                    .Include(b => b.Tags)      // Eklemek istediğiniz etiketleri de dahil edebilirsiniz
                     .FirstOrDefaultAsync(b => b.Id == blog.Id);
 
                 return CreatedAtAction(nameof(GetBlog), new { id = blog.Id }, createdBlog);
@@ -108,6 +119,7 @@ namespace BlogAPI.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
 
 
 
@@ -129,7 +141,9 @@ namespace BlogAPI.Controllers
             blog.Title = updateBlogDto.Title;
             blog.Content = updateBlogDto.Content;
             blog.Author = updateBlogDto.Author;
-            blog.Summary = updateBlogDto.Summary; 
+            blog.Summary = updateBlogDto.Summary;
+            blog.ImageUrl = updateBlogDto.ImageUrl;
+
             blog.UpdatedAt = DateTime.UtcNow;
 
             if (updateBlogDto.CategoryIds != null)
